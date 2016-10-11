@@ -1,0 +1,413 @@
+<?xml version="1.0"?>
+
+<project name="JavaEdge" basedir="../" default="all">
+
+    <property name="name" value="${ant.project.name}"/>
+    <property name="version" value="dev"/>
+    
+    <property name="debug" value="true" />
+    <property name="deprecation" value="false" />
+    <property name="optimize" value="false" />
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          Properties related to the directory tree and 
+          temporary directories used for the build
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <property name="src.java.dir" location="src/java"/>
+    <property name="src.tests.dir" location="src/test"/>
+    <property name="src.ojb.dir" location="src/ojb"/>
+    <property name="src.web.dir" location="src/web"/>
+    <property name="src.sql.dir" location="src/sql"/>
+    <property name="lib.dir" location="lib"/>
+    <property name="doc.dir" location="doc"/>
+    
+    <property name="build.dir" location="build/temp"/>
+    <property name="build.generated.dir" location="${build.dir}/generated"/>
+    <property name="build.classes.dir" location="${build.dir}/classes"/>
+    <property name="build.ojb.dir" location="${build.dir}/ojb"/>
+    <property name="tests.dir" location="${build.dir}/tests"/>
+    <property name="tests.classes.dir" location="${tests.dir}/classes"/>
+    <property name="tests.data.dir" location="${tests.dir}/data"/>
+    
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          Locations of generated artifacts
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <property name="deployDir" location="dist"/>      <!-- passed in by Anthill -->
+    <property name="dist.dir" location="${deployDir}"/>
+    <property name="dist.api.dir" location="${dist.dir}/api"/>
+    <property name="dist.download.dir" location="${dist.dir}/download"/>
+    <property name="dist.todo.dir" location="${dist.dir}/todo"/>
+    <property name="dist.booknotes.dir" location="${dist.dir}/booknotes"/>
+    <property name="dist.tests.dir" location="${dist.dir}/tests"/>
+    <property name="dist.metrics.dir" location="${dist.dir}/metrics"/>
+    <property name="dist.java2html.dir" location="${dist.dir}/java2html"/> <!-- ??? -->
+    
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          database properties
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <property name="db.driver" value="org.gjt.mm.mysql.Driver"/>
+    <property name="db.url" value="jdbc:mysql://localhost:3306/waf"/>
+    <property name="db.url.ojb" value="mysql://localhost:3306/waf"/>
+    <property name="db.url.ojb.test" value="mysql://localhost:3306/waf"/>
+    <property name="db.user" value="root"/>
+    <property name="db.pass" value="password"/>
+         
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          Classpaths
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <property name="build.sysclasspath" value="last" />
+    <path id="compile.classpath">
+        <fileset dir="${lib.dir}/build">
+            <include name="**/*.jar"/>
+            <include name="**/*.zip"/>
+        </fileset>
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar"/>
+            <include name="**/*.zip"/>
+        </fileset>
+    </path>
+
+    <path id="tests.classpath">
+        <path refid="compile.classpath"/>
+        <pathelement location="${tests.classes.dir}"/>
+        <pathelement location="${build.classes.dir}"/>
+    </path>
+
+    <!-- ###################################################################
+          Main Targets
+         ################################################################### -->
+         
+    <!-- ===================================================================
+          default target calls all other targets
+         =================================================================== -->
+    <target name="all">
+        <antcall target="dev-clean" />
+        <antcall target="doc" />
+        <antcall target="clean" />
+    </target>
+
+    <!-- ===================================================================
+          Do an incremental development build
+         =================================================================== -->
+    <target name="dev">
+        <antcall target="jars" />
+        <antcall target="run-tests" />
+    </target>
+
+    <!-- ===================================================================
+          Do a clean development build
+         =================================================================== -->
+    <target name="dev-clean">
+        <property name="dev.clean" value="yes"/>
+        <antcall target="clean" />
+        <antcall target="jars" />
+        <antcall target="run-tests" />
+    </target>
+
+    <!-- ===================================================================
+          Generate all the documentation 
+         =================================================================== -->
+    <target name="doc">
+        <antcall target="javadoc" />
+        <antcall target="todo" />
+        <antcall target="booknotes" />
+        <antcall target="move-docs" />
+        <antcall target="download" />
+        <antcall target="jdepend" />
+        <antcall target="java2html" />
+    </target>
+
+    
+    <!-- ###################################################################
+          Development Targets
+         ################################################################### -->
+         
+    <!-- ===================================================================
+          Compile the code           
+         =================================================================== -->
+    <target name="compile">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.classes.dir}"/>
+
+        <javac destdir="${build.classes.dir}"
+               debug="${debug}"
+               deprecation="${deprecation}"
+               optimize="${optimize}" >
+            <classpath refid="compile.classpath" />
+            <src path="${src.java.dir}" />
+        </javac>
+
+        <copy todir="${build.classes.dir}">
+            <fileset dir="${src.java.dir}">
+                <include name="**/*.properties" />
+                <include name="**/*.version" />
+            </fileset>
+        </copy>
+
+    </target>
+
+    <!-- ===================================================================
+          Create the jar file(s)
+         =================================================================== -->
+    <target name="jars" depends="compile">
+        <mkdir dir="${dist.dir}"/>
+
+        <copy todir="${build.ojb.dir}">
+            <fileset  dir="${src.ojb.dir}">
+                <include name="**/*"/>
+            </fileset >
+            <filterset>
+                <filter token="OJB_DB_URL" value="${db.url.ojb}" />
+            </filterset>
+        </copy>
+        
+        <war warfile="${dist.dir}/${name}.war"
+             webxml="${src.web.dir}/WEB-INF/web.xml">
+            <lib dir="${lib.dir}">
+                <exclude name="ejb_2_0.jar"/>
+                <exclude name="servlet_2_2b.jar"/>
+            </lib>
+            <classes dir="${build.classes.dir}">
+                <include name="**/*.class"/>
+                <exclude name="**/ejb/*.class" />
+            </classes>
+            <classes dir="${build.ojb.dir}">
+                <include name="**/*"/>
+            </classes>
+            <fileset dir="${src.web.dir}">
+                <exclude name="**/*.#*"/>
+            </fileset>
+        </war>
+        
+        <!-- create jar file for running unit tests from command line      -->
+        <jar jarfile="${dist.dir}/${name}-${version}.jar" 
+             basedir="${build.classes.dir}"> 
+        </jar>
+    </target>
+
+    <!-- ===================================================================
+          Compile Test Code
+         =================================================================== -->
+    <target name="compile-tests" depends="compile">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${tests.classes.dir}"/>
+
+        <javac destdir="${tests.classes.dir}"
+               debug="${debug}"
+               deprecation="${deprecation}"
+               optimize="${optimize}" >
+            <classpath refid="tests.classpath" />
+            <src path="${src.tests.dir}" />
+        </javac>
+
+        <jar jarfile="${dist.dir}/${name}-tests-${version}.jar" 
+             basedir="${tests.classes.dir}"> 
+        </jar>
+        
+        <copy todir="${tests.classes.dir}">
+            <fileset  dir="${src.ojb.dir}">
+                <include name="**/*"/>
+            </fileset >
+            <filterset>
+                <filter token="OJB_DB_URL" value="${db.url.ojb.test}" />
+            </filterset>
+            <fileset dir="${src.tests.dir}">
+                <include name="**/*.properties" />
+                <include name="**/*.version" />
+            </fileset>
+        </copy>
+    </target>
+    
+    <!-- ===================================================================
+          Prepare test database - creaete tables and user
+         =================================================================== -->
+    <target name="prepare-db" if="dev.clean">
+    </target>
+
+    <!-- ===================================================================
+          Run JUnit test cases
+         =================================================================== -->
+    <target name="run-tests" depends="compile-tests, prepare-db">
+    </target>
+    
+            
+    <!-- ###################################################################
+          Documentation Targets
+         ################################################################### -->
+    
+    <!-- ===================================================================
+          Generate javadocs 
+         =================================================================== -->
+    <target name="javadoc">
+      <mkdir dir="${dist.api.dir}"/>
+
+      <javadoc   packagenames="*"
+                 sourcepath="${src.java.dir}"
+                 classpathref="compile.classpath"
+                 destdir="${dist.api.dir}"
+                 author="true"
+                 version="false"
+                 use="true"
+                 windowtitle="${name}"
+                 doctitle="&lt;h1&gt;${name}&lt;/h1&gt;">
+      </javadoc>
+    </target>
+
+    <!-- ===================================================================
+          Create ToDo List
+         =================================================================== -->
+    <target name="todo">
+        <mkdir dir="${dist.todo.dir}"/>
+        
+        <taskdef name="document" classname="xdoclet.modules.doc.DocumentDocletTask"
+                 classpathref="compile.classpath"/>
+                 
+        <document destdir="${dist.todo.dir}">
+            <fileset dir="${src.java.dir}">
+                <include name="**/*.java" />
+            </fileset>
+            <info header="To-do list"
+                  projectName="${name}"
+                  tag="todo"/>
+        </document>
+    
+    </target>
+
+
+    <!-- ===================================================================
+          Creating the book notes list
+         =================================================================== -->
+    <target name="booknotes">
+        <mkdir dir="${dist.booknotes.dir}"/>
+
+        <taskdef name="document" classname="xdoclet.modules.doc.DocumentDocletTask"
+                 classpathref="compile.classpath"/>
+
+        <document destdir="${dist.booknotes.dir}">
+            <fileset dir="${src.java.dir}">
+                <include name="**/*.java" />
+            </fileset>
+            <info header="Booknotes list"
+                  projectName="${name}"
+                  tag="booknote"/>
+        </document>
+
+    </target>
+
+   <target name="generate-src">
+      <mkdir dir="${build.generated.dir}"/>   
+      <taskdef name="webdoclet" classname="xdoclet.modules.web.WebDocletTask"
+                 classpathref="compile.classpath"/>
+
+      <webdoclet 
+        destdir="${build.generated.dir}"
+        mergedir="${src.web.dir}/WEB-INF/mergedir"
+        force="true">
+      
+        <fileset dir="${src.java.dir}">
+           <include name="**/*.java"/>
+        </fileset>
+        <deploymentdescriptor servletspec="2.3" destdir="${build.generated.dir}">
+            <taglib uri="http://java.sun.com/jstl/ea/core" 
+                    location="/WEB-INF/c.tld" />
+         </deploymentdescriptor>
+
+         <strutsconfigxml destdir="${build.generated.dir}" validatexml="true" version="1.1"/>
+         <strutsvalidationxml/>
+      </webdoclet>
+
+   </target> 
+       
+    <!-- ===================================================================
+           Move documentation directory to the deployment directory
+         =================================================================== -->
+    <target name="move-docs">
+        <available file="${doc.dir}" property="doc.dir.present" />
+        <antcall target="move-docs.private" />
+    </target>
+
+    <target name="move-docs.private" if="doc.dir.present">
+        <move todir="${dist.dir}" if="do.dir.present">
+            <fileset dir="${doc.dir}" />
+        </move>
+    </target> 
+
+    <!-- ===================================================================
+          Create the binary and source distributions
+         =================================================================== -->
+    <target name="download">
+        <mkdir dir="${dist.download.dir}"/>
+
+        <!-- .tar.gz all the source code to the deploy directory -->
+        <tar tarfile="${dist.dir}/${name}-${version}-src.tar">
+            <tarfileset dir="${basedir}" prefix="${name}-${version}">
+                <include name="build/*"/>
+                <include name="conf/*.*"/>
+                <include name="${dist.dir}/*.?ar"/>
+                <include name="${lib.dir}/*.?ar"/>
+                <include name="${src.dir}/**/*"/>
+                <exclude name="**/CVS/*"/>
+                <exclude name="${src.dir}/**/*.*~"/>
+            </tarfileset>
+        </tar>
+        <gzip zipfile="${dist.download.dir}/${name}-${version}-src.tar.gz"
+            src="${dist.dir}/${name}-${version}-src.tar" />
+        <delete file="${dist.dir}/${name}-${version}-src.tar"/>
+
+        <!-- .tar.gz the dist directory --> 
+        <tar tarfile="${dist.dir}/${name}-${version}.tar">
+            <tarfileset dir="${basedir}" prefix="${name}-${version}">
+                <include name="conf/*.*"/>
+                <include name="dist/*.?ar"/>
+                <include name="lib/*.?ar"/>
+            </tarfileset>
+        </tar>
+        <gzip zipfile="${dist.download.dir}/${name}-${version}.tar.gz"
+            src="${dist.dir}/${name}-${version}.tar" />
+        <delete file="${dist.dir}/${name}-${version}.tar"/>
+    </target>
+
+    <!-- ===================================================================
+          Create metrics of the source code
+         =================================================================== -->
+    <target name="jdepend">
+    </target>
+
+    <!-- ===================================================================
+          Create java2html for the source code
+         =================================================================== -->
+    <target name="java2html">
+      <mkdir dir="${dist.java2html.dir}"/>
+
+      <java classname="j2h"
+            fork="yes"
+            dir="${basedir}"
+            classpathref="compile.classpath">
+        <arg value="-js" />
+        <arg value="${src.java.dir}" />
+        <arg value="-d" />
+        <arg value="${dist.java2html.dir}" />
+        <arg value="-n" />
+        <arg value="${name}" />
+        <arg value="-m" />
+        <arg value="4" />
+      </java>
+    </target>
+
+    <!-- ###################################################################
+          Clean up Targets
+         ################################################################### -->
+    <target name="clean">
+        <delete dir="${build.dir}" />
+        <delete dir="${tests.dir}" />
+    </target> 
+
+
+    <target name="reverse-db"
+            description="Starts the next generation OJB RDBMS reverse engineering tool">
+        <java fork="yes" classname="org.apache.ojb.tools.mapping.reversedb.Main"
+              dir="${basedir}" taskname="reversedb" failonerror="false" >
+            <classpath refid="compile.classpath"/>
+        </java>
+    </target>
+</project>

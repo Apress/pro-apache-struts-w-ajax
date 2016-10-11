@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is a sample metadata repository for the ObJectBridge System.
+
+     Use this file as a template for building your own mappings-->
+
+
+
+<!-- defining entities for include-files -->
+
+<!DOCTYPE descriptor-repository SYSTEM "repository.dtd" [
+
+<!ENTITY internal SYSTEM "repository_internal.xml">
+
+
+
+]>
+
+
+
+
+
+<descriptor-repository version="1.0" isolation-level="read-uncommitted">
+
+<!-- The Default JDBC Connection. If a class-descriptor does not specify its own JDBC Connection,
+
+     the Connection specified here will be used. -->
+
+
+
+   <jdbc-connection-descriptor
+                jcd-alias="strutsdb"
+                default-connection="true"
+   		platform="MySQL"
+   		jdbc-level="2.0"
+   		driver="org.gjt.mm.mysql.Driver"
+   		protocol="jdbc"
+		subprotocol="@OJB_DB_URL@"
+   		dbalias="waf"
+   		username="waf_user"
+   		password="password"
+		/>
+
+
+
+    <class-descriptor class="com.apress.javaedge.member.MemberVO" table="member">
+
+       <field-descriptor name="memberId" column="member_id" jdbc-type="BIGINT"  primarykey="true" autoincrement="true"/>
+
+       <field-descriptor name="firstName" column="first_name" jdbc-type="VARCHAR"/>
+
+       <field-descriptor name="lastName"  column="last_name"  jdbc-type="VARCHAR"/>
+
+       <field-descriptor name="userId" column="userid" jdbc-type="VARCHAR"/>
+
+       <field-descriptor name="password" column="password" jdbc-type="VARCHAR"/>
+
+       <field-descriptor name="email" column="email" jdbc-type="VARCHAR"/>
+
+    </class-descriptor>
+
+   <!-- This is an example of a custom proxy. -->
+   <!--<class-descriptor class="com.apress.javaedge.member.PersonVO"
+                      proxy="com.apress.javaedge.member.PersonProxy" table="member">
+
+       <field-descriptor name="memberId" column="member_id" jdbc-type="BIGINT"  primarykey="true" autoincrement="true"/>
+
+       <field-descriptor name="firstName" column="first_name" jdbc-type="VARCHAR"/>
+
+       <field-descriptor name="lastName"  column="last_name"  jdbc-type="VARCHAR"/>
+
+       <field-descriptor name="userId" column="userid" jdbc-type="VARCHAR"/>
+
+       <field-descriptor name="password" column="password" jdbc-type="VARCHAR"/>
+
+       <field-descriptor name="email" column="email" jdbc-type="VARCHAR"/>
+
+    </class-descriptor>-->
+
+    <!--  This is an example of a dynamic proxy -->
+    <!--<class-descriptor class="com.apress.javaedge.member.PersonVO"
+                      proxy="dynamic" table="member">
+
+       <field-descriptor name="memberId" column="member_id" jdbc-type="BIGINT"  primarykey="true" autoincrement="true"/>
+
+       <field-descriptor name="firstName" column="first_name" jdbc-type="VARCHAR"/>
+
+       <field-descriptor name="lastName"  column="last_name"  jdbc-type="VARCHAR"/>
+
+       <field-descriptor name="userId" column="userid" jdbc-type="VARCHAR"/>
+
+       <field-descriptor name="password" column="password" jdbc-type="VARCHAR"/>
+
+       <field-descriptor name="email" column="email" jdbc-type="VARCHAR"/>
+
+    </class-descriptor>-->
+
+
+    <class-descriptor class="com.apress.javaedge.story.StoryVO" table="story">
+
+       <field-descriptor name="storyId" column="story_id" jdbc-type="BIGINT"  primarykey="true" autoincrement="true"/>
+
+       <field-descriptor name="memberId" column="member_id" jdbc-type="BIGINT"/>
+
+       <field-descriptor name="storyTitle" column="story_title" jdbc-type="VARCHAR"/>
+
+       <field-descriptor name="storyIntro"  column="story_intro"  jdbc-type="VARCHAR"/>
+
+       <field-descriptor name="storyBody" column="story_body" jdbc-type="LONGVARBINARY"/>
+
+       <field-descriptor name="submissionDate" column="submission_date" jdbc-type="DATE"/>
+
+
+       <collection-descriptor name ="comments" element-class-ref="com.apress.javaedge.story.StoryCommentVO" auto-retrieve="true" auto-update="true" auto-delete="true">
+
+          <inverse-foreignkey field-ref="storyId"/>
+
+
+       </collection-descriptor>
+
+
+
+       <reference-descriptor name="storyAuthor" class-ref="com.apress.javaedge.member.MemberVO" auto-retrieve="true">
+
+         <foreignkey field-ref="memberId"/>
+
+       </reference-descriptor>
+
+    </class-descriptor>
+
+        
+
+    <class-descriptor class="com.apress.javaedge.story.StoryCommentVO" table="story_comment">
+
+       <field-descriptor name="commentId" column="comment_id" jdbc-type="BIGINT"  primarykey="true" autoincrement="true"/>
+
+       <field-descriptor name="storyId" column="story_id" jdbc-type="BIGINT"/>
+
+       <field-descriptor name="memberId" column="member_id" jdbc-type="BIGINT"/>
+
+       <field-descriptor name="commentBody" column="comment_body" jdbc-type="LONGVARBINARY"/>
+
+       <field-descriptor name="submissionDate" column="submission_date" jdbc-type="DATE"/>
+       
+
+       <reference-descriptor name="commentAuthor" class-ref="com.apress.javaedge.member.MemberVO" auto-retrieve="true">
+
+         <foreignkey field-ref="memberId"/>
+
+       </reference-descriptor>
+
+    </class-descriptor>
+
+
+
+
+
+    <!-- include ojb internal mappings here -->
+
+    &internal;
+
+
+
+
+
+</descriptor-repository>

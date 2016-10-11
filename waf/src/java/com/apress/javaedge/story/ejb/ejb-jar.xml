@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar>
+  <description>Story Manager EJB</description>
+  <display-name>StoryManager</display-name>
+  <enterprise-beans>
+     <session>
+       <ejb-name>StoryManager</ejb-name>
+       <home>com.apress.javaedge.story.ejb.StoryManagerHome</home>
+       <remote>com.apress.javaedge.story.ejb.StoryManager</remote>
+       <ejb-class>com.apress.javaedge.story.ejb.StoryManagerBean</ejb-class>
+       <session-type>Stateless</session-type>
+       <transaction-type>Container</transaction-type>
+     </session>
+  </enterprise-beans>
+  <container-transaction>
+     <description>Standard Transaction Isolation</description>
+     <method>
+         <ejb-name>StoryManager</ejb-name>
+         <method-name>*</method-name>
+     </method>
+     <trans-attribute>Required</trans-attribute>
+  </container-transaction>
+</ejb-jar>  
+

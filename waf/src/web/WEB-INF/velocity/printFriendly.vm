@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<title>Print Friendly</title>
+	</head>
+	<body>
+	<a href="$link.setAction("/storyDetailSetup")?storyId=$storyVO.storyId">[back]</a>
+		<table border="0" cellspacing="2" cellpadding="1">
+		
+			<tr>
+				<td colspan="2">
+					<font size="10">$storyVO.StoryTitle</font>
+				</td>
+			</tr>
+			<tr>
+				<td bgcolor="#CCCCCC">Posted By:</td>
+				<td>$storyVO.StoryAuthor.FirstName $storyVO.StoryAuthor.LastName</td>
+			</tr>
+			<tr>
+				<td bgcolor="#CCCCCC">On:</td>
+				<td>$storyVO.SubmissionDate</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<font size="4">
+						<i>$storyVO.StoryIntro</i>
+					</font>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<font size="4">
+						$storyVO.StoryBody
+					</font>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<br><i>Comments</i><hr>
+				</td>
+			#foreach ($comment in $comments)
+			<tr>
+				<td width="30">&nbsp;</td>
+				<td>Posted By: $comment.CommentAuthor.FirstName $comment.CommentAuthor.LastName<br>
+				On: $comment.SubmissionDate</td>
+			</tr>
+			<tr>
+				<td width="30">&nbsp;</td>
+				<td>$comment.CommentBody</td>
+			</tr>
+			<tr>
+				<td colspan="2"><hr></td>
+			</tr>
+			#end
+		
+		</table>
+	</body>
+
+</html>

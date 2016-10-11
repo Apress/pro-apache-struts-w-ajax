@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+    <classpathentry kind="src" path="src/test"/>
+    <classpathentry kind="src" path="src/java"/>
+    <classpathentry kind="lib" path="lib/commons-beanutils.jar"/>
+    <classpathentry kind="lib" path="lib/commons-collections.jar"/>
+    <classpathentry kind="lib" path="lib/commons-dbcp.jar"/>
+    <classpathentry kind="lib" path="lib/commons-digester.jar"/>
+    <classpathentry kind="lib" path="lib/commons-fileupload.jar"/>
+    <classpathentry kind="lib" path="lib/commons-lang.jar"/>
+    <classpathentry kind="lib" path="lib/commons-lang-0.1-dev.jar"/>
+    <classpathentry kind="lib" path="lib/commons-logging.jar"/>
+    <classpathentry kind="lib" path="lib/commons-pool.jar"/>
+    <classpathentry kind="lib" path="lib/commons-resources.jar"/>
+    <classpathentry kind="lib" path="lib/commons-services.jar"/>
+    <classpathentry kind="lib" path="lib/commons-validator.jar"/>
+    <classpathentry kind="lib" path="lib/jakarta-oro.jar"/>
+    <classpathentry kind="lib" path="lib/jdbc2_0-stdext.jar"/>
+    <classpathentry kind="lib" path="lib/junit.jar"/>
+    <classpathentry kind="lib" path="lib/logkit-1.0.1.jar"/>
+    <classpathentry kind="lib" path="lib/lucene-1.2.jar"/>
+    <classpathentry kind="lib" path="lib/mm.mysql-2.0.14-bin.jar"/>
+    <classpathentry kind="lib" path="lib/servlet2_3.jar"/>
+    <classpathentry kind="lib" path="lib/struts.jar"/>
+    <classpathentry kind="lib" path="lib/velocity-1.4-dev.jar"/>
+    <classpathentry kind="lib" path="lib/veltag-0.01-dev.jar"/>
+    <classpathentry kind="lib" path="lib/build/commons-collections-2.0.jar"/>
+    <classpathentry kind="lib" path="lib/db-ojb-1.0.rc4.jar"/>
+    <classpathentry kind="lib" path="C:/java/jboss-3.2.2/jboss-3.2.2/server/default/lib/javax.servlet.jar"/>
+    <classpathentry kind="lib" path="C:/java/jboss-3.2.2/jboss-3.2.2/server/default/lib/jboss-j2ee.jar"/>
+    <classpathentry kind="lib" path="lib/log4j-1.2.8.jar"/>
+    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+    <classpathentry kind="output" path="classes"/>
+</classpath>

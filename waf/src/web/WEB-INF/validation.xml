@@ -1,0 +1,54 @@
+<form-validation>
+  <formset>
+     <form name="postStoryForm">
+         <field property="storyTitle" depends="required,maxlength">
+            <msg name="required" key="error.poststory.field.null"/>
+            <msg name="maxlength" key="error.poststory.field.length"/>
+            <msg name="vulgaritychecker" key="error.vulgarity"/>
+          
+            <arg0 key="javaedge.poststory.form.titlelabel"/> 
+            <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+            <var>
+               <var-name>maxlength</var-name>
+               <var-value>100</var-value>
+            </var>
+            <var>
+               <var-name>vulgarities</var-name>
+               <var-value>dummy, stupid, ninny</var-value>
+            </var>
+         </field>
+         <field property="storyIntro" depends="required,maxlength">
+            <msg name="required" key="error.poststory.field.null"/>
+            <msg name="maxlength" key="error.poststory.field.length"/>
+            <msg name="vulgaritychecker" key="error.vulgarity"/>
+
+            <arg0 key="javaedge.poststory.form.introlabel"/>
+            <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+            <var>
+               <var-name>maxlength</var-name>
+               <var-value>2048</var-value>
+            </var>
+            <var>
+               <var-name>vulgarities</var-name>
+               <var-value>dummy, stupid, ninny</var-value>
+            </var>
+         </field>
+         <field property="storyBody" depends="required,maxlength">
+            <msg name="required" key="error.poststory.field.null"/>
+            <msg name="maxlength" key="error.poststory.field.length"/>
+            <msg name="vulgaritychecker" key="error.vulgarity"/>
+
+            <arg0 key="javaedge.poststory.form.bodylabel"/>
+            <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+            <var>
+               <var-name>maxlength</var-name>
+               <var-value>100000</var-value>
+            </var>
+            <var>
+               <var-name>vulgarities</var-name>
+               <var-value>dummy, stupid, ninny</var-value>
+            </var>
+         </field>
+     </form>
+  </formset>
+</form-validation>

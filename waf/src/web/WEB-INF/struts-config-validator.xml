@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
+                               "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+
+<struts-config>
+   <form-beans>
+      <!--<form-bean name="postStoryForm" type="org.apache.struts.validator.DynaValidatorForm">
+         <form-property name="storyIntro" type="java.lang.String" initial="Please enter a story intro!!!!"/>
+         <form-property name="storyBody"  type="java.lang.String" initial="Please enter a story body!!!!!"/>
+         <form-property name="storyTitle" type="java.lang.String" initial="Please enter a story title!!!!"/>
+      </form-bean>-->
+
+<!--      <form-bean name="postStoryForm" type="com.apress.javaedge.struts.poststory.PostStoryDynaForm">
+         <form-property name="storyIntro" type="java.lang.String"/>
+         <form-property name="storyBody"  type="java.lang.String"/>
+         <form-property name="storyTitle" type="java.lang.String"/>
+      </form-bean>-->
+      
+      <!--<form-bean name="postStoryForm" type="com.apress.javaedge.struts.poststory.PostStoryDynaValidatorForm">
+         <form-property name="storyIntro" type="java.lang.String" initial="test"/>
+         <form-property name="storyBody"  type="java.lang.String" initial="test"/>
+         <form-property name="storyTitle" type="java.lang.String" initial="test"/>
+      </form-bean>-->
+
+      <form-bean name="postStoryForm" type="com.apress.javaedge.struts.poststory.PostStoryValidatorForm">
+         <form-property name="storyIntro" type="java.lang.String" initial="test!!!"/>
+         <form-property name="storyBody"  type="java.lang.String" initial="test!!!"/>
+         <form-property name="storyTitle" type="java.lang.String" initial="test!!!"/>
+      </form-bean>
+
+      <form-bean name="postCommentForm" type="com.apress.javaedge.struts.postcomment.PostCommentForm"/>
+      <form-bean name="signUpForm"      type="com.apress.javaedge.struts.signup.SignUpForm"/>
+      <form-bean name="loginForm"       type="com.apress.javaedge.struts.login.LoginForm"/>
+      <form-bean name="searchForm"	type="com.apress.javaedge.struts.search.SearchForm"/>
+   </form-beans>
+   
+   <global-forwards type="org.apache.struts.action.ActionForward">
+      <forward name="system.error" path="/WEB-INF/jsp/systemError.jsp"/>
+      <forward name="default.action" path="/execute/homePageSetup"/>
+   </global-forwards>
+ 
+   <action-mappings>
+      <action path="/homePageSetup"
+              type="com.apress.javaedge.struts.homepage.HomePageSetupAction"
+              unknown="true">
+              <forward name="homepage.success" path="/WEB-INF/jsp/homePage.jsp"/>
+      </action>
+      <action path="/storyDetailSetup"
+              type="com.apress.javaedge.struts.storydetail.StoryDetailSetupAction">
+              <forward name="storydetail.success" path="/WEB-INF/jsp/storyDetail.jsp"/>
+      </action>
+      
+      <action path="/signUpSetup"
+              type="com.apress.javaedge.struts.signup.SignUpSetupAction"
+              name="signUpForm"
+              scope="request"
+              validate="false">
+              <forward name="signup.success" path="/WEB-INF/jsp/signUp.jsp"/>
+      </action>
+      
+      <action path="/signUp"
+              input="/WEB-INF/jsp/signUp.jsp"
+              name="signUpForm"
+              scope="request"
+              validate="true"
+              type="com.apress.javaedge.struts.signup.SignUp">
+              <forward name="signup.success" path="/execute/homePageSetup"/>
+      </action>
+      
+      <action path="/login"
+              input="/execute/homePageSetup"
+              name="loginForm"
+              scope="request"
+              validate="true"
+              type="com.apress.javaedge.struts.login.Login">
+              <forward name="login.success" path="/execute/homePageSetup"/>
+      </action>
+      
+      <action path="/postStorySetup"
+              type="com.apress.javaedge.struts.poststory.PostStorySetupAction"
+              name="postStoryForm"
+              scope="request"
+              validate="false">
+              <forward name="poststory.success" path="/WEB-INF/jsp/postStory.jsp"/>
+      </action>
+      
+      <action path="/postStory"
+              input="/WEB-INF/jsp/postStory.jsp"
+              name="postStoryForm"
+              scope="request"
+              validate="true"
+              type="com.apress.javaedge.struts.poststory.PostStoryValidator">
+              <forward name="poststory.success" path="/execute/homePageSetup"/>
+      </action>
+      
+      <action path="/postCommentSetup"
+              type="com.apress.javaedge.struts.postcomment.PostCommentSetupAction"
+              name="postCommentForm"
+              scope="request"
+              validate="false">
+              <forward name="postcomment.success" path="/WEB-INF/jsp/postComment.jsp"/>
+      </action>
+      
+      <action path="/postComment"
+              type="com.apress.javaedge.struts.postcomment.PostComment"
+              name="postCommentForm"
+              scope="request"
+              validate="false">
+              <forward name="postcomment.success" path="/execute/homePageSetup"/>
+      </action>
+      
+      <action path="/SearchSetup"
+              type="com.apress.javaedge.struts.search.SearchFormSetupAction"
+              name="searchForm"
+              scope="request"
+              validate="false">
+              <forward name="search.success" path="/WEB-INF/jsp/searchForm.jsp"/>
+      </action>
+      
+      <action path="/Search"
+              type="com.apress.javaedge.struts.search.Search"
+              input="/WEB-INF/jsp/searchForm.jsp"
+              name="searchForm"
+              scope="request"
+              validate="false">
+              <forward name="search.success" path="/WEB-INF/jsp/searchForm.jsp"/>
+      </action>
+
+      <!-- Tiles Actions -->
+      <action path="/tiles/homePageSetup"
+              type="com.apress.javaedge.struts.homepage.HomePageSetupAction"
+              unknown="false">
+              <forward name="homepage.success" path=".homePage"/>
+      </action>
+
+      <action path="/tiles/storyDetailSetup"
+              type="com.apress.javaedge.struts.storydetail.StoryDetailSetupAction">
+              <forward name="storydetail.success" path=".storyDetail"/>
+      </action>
+      
+      <action path="/tiles/signUpSetup"
+              type="com.apress.javaedge.struts.signup.SignUpSetupAction"
+              name="signUpForm"
+              scope="request"
+              validate="false">
+              <forward name="signup.success" path=".signUp"/>
+      </action>
+      
+      <action path="/tiles/signUp"
+              input=".signUp"
+              name="signUpForm"
+              scope="request"
+              validate="true"
+              type="com.apress.javaedge.struts.signup.SignUp">
+              <forward name="signup.success" path="/execute/tiles/homePageSetup"/>
+      </action>
+      
+      <action path="/tiles/login"
+              input=".homePage"
+              name="loginForm"
+              scope="request"
+              validate="true"
+              type="com.apress.javaedge.struts.login.Login">
+              <forward name="login.success" path="/execute/tiles/homePageSetup"/>
+      </action>
+      
+      <action path="/tiles/postStorySetup"
+              type="com.apress.javaedge.struts.poststory.PostStorySetupAction"
+              name="postStoryForm"
+              scope="request"
+              validate="false">
+              <forward name="poststory.success" path=".postStory"/>
+      </action>
+      
+      <action path="/tiles/postStory"
+              input=".postStory"
+              name="postStoryForm"
+              scope="request"
+              validate="true"
+              type="com.apress.javaedge.struts.poststory.PostStory">
+              <forward name="poststory.success" path="/execute/tiles/homePageSetup"/>
+      </action>
+      
+      <action path="/tiles/postCommentSetup"
+              type="com.apress.javaedge.struts.postcomment.PostCommentSetupAction"
+              name="postCommentForm"
+              scope="request"
+              validate="false">
+              <forward name="postcomment.success" path=".postComment"/>
+      </action>
+      
+      <action path="/tiles/postComment"
+              type="com.apress.javaedge.struts.postcomment.PostComment"
+              name="postCommentForm"
+              scope="request"
+              validate="false">
+              <forward name="postcomment.success" path="/execute/tiles/homePageSetup"/>
+      </action>
+      
+      <action path="/tiles/SearchSetup"
+              type="com.apress.javaedge.struts.search.SearchFormSetupAction"
+              name="searchForm"
+              scope="request"
+              validate="false">
+              <forward name="search.success" path=".searchForm"/>
+      </action>
+      
+      <action path="/tiles/Search"
+              type="com.apress.javaedge.struts.search.Search"
+              input=".searchForm"
+              name="searchForm"
+              scope="request"
+              validate="false">
+              <forward name="search.success" path=".searchForm"/>
+      </action>
+
+      <action path="/tiles/simplePage" type="com.apress.javaedge.struts.tiles.TilesTestAction">
+              <forward name="tiles.success" path="/WEB-INF/jsp/tiles/simplePage.jsp"/>
+      </action>
+
+      <action path="/tiles/homePageExt"
+              type="com.apress.javaedge.struts.homepage.HomePageSetupAction"
+              unknown="false">
+              <forward name="homepage.success" path="/WEB-INF/jsp/tiles/homePage.jsp"/>
+      </action>
+
+      <action path="/tilesTestDef" type="com.apress.javaedge.struts.tiles.TilesTestAction">
+              <forward name="tiles.success" path=".baseTile"/>
+      </action>
+      <action path="/tilesTestEXT" type="com.apress.javaedge.struts.tiles.TilesTestAction">
+              <forward name="tiles.success" path=".helloTile"/>
+      </action>
+   </action-mappings>
+
+   <!--The validator plug-in-->
+   <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+      <set-property property="pathnames" value="/WEB-INF/validator-rules.xml,
+                                                /WEB-INF/validation.xml"/>
+   </plug-in>
+
+   <plug-in className="com.apress.javaedge.struts.search.IndexerPlugIn">
+   	<set-property property="time" value="360000"/>   
+   </plug-in>
+</struts-config>

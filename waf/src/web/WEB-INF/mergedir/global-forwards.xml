@@ -1,0 +1,4 @@
+<global-forwards type="org.apache.struts.action.ActionForward">
+   <forward name="system.error" path="/WEB-INF/jsp/systemError.jsp"/>
+   <forward name="default.action" path="/execute/homePageSetup"/>
+</global-forwards>

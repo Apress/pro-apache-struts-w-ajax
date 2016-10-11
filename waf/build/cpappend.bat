@@ -1,0 +1,1 @@
+set LIB_JARS=%LIB_JARS%;%1

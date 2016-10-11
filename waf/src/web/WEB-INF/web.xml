@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+  PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+  "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+  <!--Setting up the MemberFilter-->
+  <filter>
+     <filter-name>MemberFilter</filter-name>
+     <filter-class>com.apress.javaedge.common.MemberFilter</filter-class>
+  </filter>
+  
+  <filter-mapping>
+     <filter-name>MemberFilter</filter-name>
+     <url-pattern>/execute/*</url-pattern>
+  </filter-mapping>
+  
+  <!-- Standard Action Servlet Configuration (with debugging) -->
+  <servlet>
+    <servlet-name>action</servlet-name>
+    <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+    <init-param>
+      <param-name>config</param-name>
+      <!--<param-value>/WEB-INF/jsp/tiles/struts-config-tiles.xml</param-value>-->
+      <!--<param-value>/WEB-INF/struts-config-validator.xml</param-value> -->
+        <param-value>/WEB-INF/struts-config.xml</param-value>
+    </init-param>
+    <init-param>
+      <param-name>validating</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+  
+  <!-- Velocity Template Engine Servlet -->
+  <servlet>
+  	<servlet-name>velocity</servlet-name>
+  	<servlet-class>
+    	org.apache.velocity.tools.view.servlet.VelocityViewServlet
+  	</servlet-class>
+
+ 	 <init-param>
+ 	   <param-name>org.apache.velocity.toolbox</param-name>
+   	   <param-value>/WEB-INF/toolbox.xml</param-value>
+ 	 </init-param>
+
+  	<init-param>
+    	<param-name>org.apache.velocity.properties</param-name>
+	    <param-value>/WEB-INF/velocity.properties</param-value>
+ 	</init-param>
+
+ 	<load-on-startup>10</load-on-startup>
+  	
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>velocity</servlet-name>
+  	<url-pattern>*.vm</url-pattern>
+  </servlet-mapping>
+
+
+  <!-- Standard Action Servlet Mapping -->
+  <servlet-mapping>
+    <servlet-name>action</servlet-name>
+    <url-pattern>/execute/*</url-pattern>
+  </servlet-mapping>
+
+
+  <!-- The Usual Welcome File List -->
+  <welcome-file-list>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <!-- Struts Tag Library Descriptors -->
+  <taglib>
+    <taglib-uri>/taglibs/struts-bean</taglib-uri>
+    <taglib-location>/WEB-INF/taglibs/struts-bean.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/taglibs/struts-html</taglib-uri>
+    <taglib-location>/WEB-INF/taglibs/struts-html.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/taglibs/struts-logic</taglib-uri>
+    <taglib-location>/WEB-INF/taglibs/struts-logic.tld</taglib-location>
+  </taglib>
+  
+  <taglib>
+    <taglib-uri>/taglibs/struts-template</taglib-uri>
+    <taglib-location>/WEB-INF/taglibs/struts-template.tld</taglib-location>
+  </taglib>
+  
+  <taglib>
+    <taglib-uri>/taglibs/vel</taglib-uri>
+    <taglib-location>/WEB-INF/taglibs/veltag.tld</taglib-location>
+  </taglib>
+
+  <!-- Tiles Tage Library Descriptors -->
+  <taglib>
+     <taglib-uri>/taglibs/struts-tiles</taglib-uri>
+     <taglib-location>/WEB-INF/taglibs/struts-tiles.tld</taglib-location>
+  </taglib>
+  
+</web-app>

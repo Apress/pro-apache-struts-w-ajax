@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+ <!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration//EN"
+       "http://jakarta.apache.org/struts/dtds/tiles-config.dtd">
+
+<tiles-definitions>
+  <definition name=".baseDef" path="/WEB-INF/jsp/tiles/template.jsp">
+        <put name="title"    value="Base Template Page" />
+        <put name="header"   value="/WEB-INF/jsp/tiles/header.jsp" />
+        <put name="content"  value="/WEB-INF/jsp/tiles/baseContent.jsp" />
+        <put name="footer"   value="/WEB-INF/jsp/tiles/footer.jsp"/>
+  </definition>
+
+  <definition name=".baseWithOneAd" extends=".baseDef">
+      <put name="adone" value="/WEB-INF/jsp/tiles/ad.jsp"/>
+  </definition>
+
+  <definition name=".baseWithTwoAds" extends=".baseWithOneAd">
+      <put name="ad-two" value="/WEB-INF/jsp/tiles/baseAdTwo.html"/>
+  </definition>
+
+  <definition name=".homePage" extends=".baseWithOneAd">
+      <put name="title" value="Todays Top Stories!!!" />
+      <put name="content"  value="/WEB-INF/jsp/tiles/homePageContent.jsp" />
+  </definition>
+
+  <definition name=".postComment" extends=".baseDef">
+      <put name="title" value="Post a Comment" />
+      <put name="content"  value="/WEB-INF/jsp/tiles/postCommentContent.jsp" />
+  </definition>
+
+  <definition name=".postStory" extends=".baseDef">
+      <put name="title" value="Post a Story" />
+      <put name="content"  value="/WEB-INF/jsp/tiles/postStoryContent.jsp" />
+  </definition>
+
+  <definition name=".searchForm" extends=".baseDef">
+      <put name="title" value="Search JavaEdge" />
+      <put name="content"  value="/WEB-INF/jsp/tiles/searchFormContent.jsp" />
+  </definition>
+
+  <definition name=".searchForm" extends=".baseDef">
+      <put name="title" value="Search JavaEdge" />
+      <put name="content"  value="/WEB-INF/jsp/tiles/searchFormContent.jsp" />
+  </definition>
+
+  <definition name=".signUp" extends=".baseDef">
+      <put name="title" value="Become a JavaEdge Member" />
+      <put name="content"  value="/WEB-INF/jsp/tiles/signUpContent.jsp" />
+  </definition>
+
+  <definition name=".storyDetail" extends=".baseDef">
+      <put name="title" value="View a specific story" />
+      <put name="content"  value="/WEB-INF/jsp/tiles/storyDetailContent.jsp" />
+  </definition>
+</tiles-definitions>
